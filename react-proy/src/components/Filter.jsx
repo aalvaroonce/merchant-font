@@ -1,24 +1,31 @@
 import { useState } from "react";
 
-const Filter = ({ onFilterChange }) => {
+function Filter ({ onFilterChange }) {
     const [activity, setActivity] = useState("");
     const [city, setCity] = useState("");
     const [sortByScoring, setSortByScoring] = useState(false);
     const [upwards, setUpwards] = useState("true");
 
-    function handleCityChange(event) {
-        setCity(event.target.value);
+    function capitalize(str) {
+        if (typeof str !== 'string' || str.length === 0) {
+            return '';
+        }
+        return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
     }
 
-    function handleActivityChange(event) {
-        setActivity(event.target.value);
+    const handleCityChange= (event)=> {
+        setCity(capitalize(event.target.value));
     }
 
-    function toggleSortByScoring() {
+    const handleActivityChange= (event)=> {
+        setActivity(capitalize(event.target.value));
+    }
+
+    const toggleSortByScoring = () => {
         setSortByScoring(!sortByScoring);
     }
 
-    function handleOrderChange(event) {
+    const handleOrderChange= (event)=> {
         setUpwards(event.target.value);
     }
 
@@ -59,7 +66,6 @@ const Filter = ({ onFilterChange }) => {
 
             {sortByScoring && (
                 <>
-                    <label className="filter-label">Dirección</label>
                     <div className="direction-options">
                         <label className="direction-option">
                             <input

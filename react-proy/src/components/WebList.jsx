@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import WebDetails from './WebDetails';
 import Filter from './Filter';
 
-const WebList = () => {
+function WebList() {
     const [webs, setWebs] = useState([]);
     const [cifSelected, setCifSelected] = useState("");
     const [filters, setFilters] = useState({ city: "", activity: "", sortByScoring: false, upwards: "true" });
@@ -12,7 +12,7 @@ const WebList = () => {
         fetchWebs(filters);
     }, [filters]);
 
-    async function fetchWebs(filters) {
+    const fetchWebs= async (filters) => {
         try {
             let url = `http://localhost:3000/api/web`;
             if (filters.city || filters.activity || filters.sortByScoring) {

@@ -1,0 +1,140 @@
+/* General container for centering the form */
+
+/* General container for centering the form */
+.app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #f3f4f6;
+    font-family: Arial, sans-serif;
+    flex-direction: column; /* Para tener el formulario y el botón en columna */
+}
+
+/* Styles for the switch button */
+.switch-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #3b82f6;
+    background: none;
+    border: 2px solid #3b82f6;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.switch-button:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Form container */
+.formulario-container {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: left;
+}
+
+/* Labels */
+.formulario-container label {
+    display: block;
+    font-weight: bold;
+    color: #333333;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+/* Inputs */
+.formulario-container input[type="text"],
+.formulario-container input[type="password"],
+.formulario-container input[type="number"],
+.hobby-input input {
+    width: 94%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.formulario-container input:focus {
+    border-color: #3b82f6;
+}
+
+/* Checkbox */
+.formulario-container input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Buttons */
+.formulario-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.formulario-container button:hover {
+    background-color: #2563eb;
+}
+
+.hobby-input button {
+    width: auto;
+    padding: 5px 10px;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.hobby-input button:hover {
+    background-color: #059669;
+}
+
+/* Error Message */
+.error-message {
+    color: #b91c1c;
+    font-size: 14px;
+    margin-top: 10px;
+    background-color: #fef2f2;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Message styles */
+.mensaje-container {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.mensaje-exito {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.mensaje-error {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}

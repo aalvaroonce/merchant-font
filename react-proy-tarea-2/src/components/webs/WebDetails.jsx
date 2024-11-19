@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import WebReview from "./WebReview"
 
 export default function WebDetails({ cif }) {
     const [web, setWeb] = useState(null);
@@ -9,7 +10,6 @@ export default function WebDetails({ cif }) {
                 const url = `http://localhost:3000/api/web/${cif}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
                 setWeb(data.data);
             } 
             catch(error) {
@@ -39,6 +39,7 @@ export default function WebDetails({ cif }) {
                 {web.imageArray.map((imageUrl, index) => (
                     <img key={index} className="web-image" src={imageUrl} alt={`Imagen ${index + 1}`} />
                 ))}
+                <WebReview web={web}/>
             </div>
         );
     }

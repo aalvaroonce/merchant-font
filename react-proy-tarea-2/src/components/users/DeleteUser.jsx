@@ -1,28 +1,35 @@
+import { useState } from 'react'
+import Mensaje from '../Mensaje';
+
 export default function DeleteUser(){
 
+    const [mensaje, setMensaje] = useState(null);
     const token = localStorage.getItem('token');
-    const id= localStorage.getItem('id')
+    const user = JSON.parse(localStorage.getItem('user'));
+    const id= user._id
     
     const handleClick= async () => {
 
-        try{
-            const response = await fetch(`http://localhost:3000/api/users/${id}`, 
-                {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-            const data = await response.json()
-            console.log(data)
-        }
-        catch (err){
-            console.log('Error al eliminar la data'+err)
-        }
+        fetch(`http://localhost:3000/api/users/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setMensaje({ text: data.message, type: "exito" });
+            })
+            .catch(error => {
+                setMensaje({ text: "Error en la conexión", type: "error" });
+            })
+        
     }
     return(
         <>
             <button onClick={handleClick}>Pulsa para borrar</button>
+            <Mensaje mensaje={mensaje}/>
         </>
     )
 }

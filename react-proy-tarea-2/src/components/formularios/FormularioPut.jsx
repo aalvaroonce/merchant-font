@@ -1,34 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+const getUserDataFromLocalStorage = () => {
+    const userData = localStorage.getItem('user');
+    try {
+        const parsedData = JSON.parse(userData) || {};
+        const { role, ...filteredData } = parsedData;
+        return filteredData;
+
+    } catch (error) {
+        console.warn("Error al parsear los datos del localStorage:", error);
+        return {};
+    }
+};
 
 function FormularioPut({ sendData }) {
-    const [data, setData] = useState(null);
-    const token = localStorage.getItem('token');
-    const id = localStorage.getItem('id');
-
-    useEffect(() => {
-        fetch(`http://localhost:3000/api/user/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',  
-                'Authorization': `Bearer ${token}`
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                setData({
-                    name: data.data.user.name,
-                    email: data.data.user.email,
-                    age: data.data.user.age,
-                    city: data.data.user.city,
-                    hobbies: data.data.user.hobbies,
-                    openToOffers: data.data.user.openToOffers
-                });
-            })
-            .catch(error => {
-                console.log({ text: "Error en la conexión", type: "error" });
-            });
-    }, [token, id]);
-
+    const [data, setData] = useState(getUserDataFromLocalStorage()); 
     const [error, setError] = useState("");
     const [newHobby, setNewHobby] = useState(""); 
     const [editIndex, setEditIndex] = useState(null); 
@@ -48,16 +34,21 @@ function FormularioPut({ sendData }) {
 
     const handleAddHobby = () => {
         if (newHobby.trim()) {
-            const updatedHobbies = editIndex !== null
-                ? data.hobbies.map((hobby, index) => index === editIndex ? newHobby.trim() : hobby)
-                : [...data.hobbies, newHobby.trim()];
+            const hobbyAlreadyExists = data.hobbies.includes(newHobby.trim());
+            if (!hobbyAlreadyExists || editIndex !== null) {
+                const updatedHobbies = editIndex !== null
+                    ? data.hobbies.map((hobby, index) => index === editIndex ? newHobby.trim() : hobby)
+                    : [...(data.hobbies || []), newHobby.trim()]; 
 
-            setData({
-                ...data,
-                hobbies: updatedHobbies
-            });
-            setNewHobby("");
-            setEditIndex(null); 
+                setData({
+                    ...data,
+                    hobbies: updatedHobbies
+                });
+                setNewHobby("");
+                setEditIndex(null);
+            } else {
+                setError("El hobby ya existe en la lista.");
+            }
         }
     };
 
@@ -77,16 +68,32 @@ function FormularioPut({ sendData }) {
     return (
         <div className="formulario-container">
             <label>Nombre</label>
-            <input type="text" placeholder={data?.name || ''} onChange={(event) => handleChange(event, 'name')} />
+            <input 
+                type="text" 
+                placeholder={data?.name || ''} 
+                onChange={(event) => handleChange(event, 'name')} 
+            />
 
             <label>Email</label>
-            <input type="text" placeholder={data?.email || ''} onChange={(event) => handleChange(event, 'email')} />
+            <input 
+                type="text" 
+                placeholder={data?.email || ''} 
+                onChange={(event) => handleChange(event, 'email')} 
+            />
 
             <label>Edad</label>
-            <input type="number" placeholder={data?.age || ''} onChange={(event) => handleChange(event, 'age')} />
+            <input 
+                type="number" 
+                placeholder={data?.age || ''} 
+                onChange={(event) => handleChange(event, 'age')} 
+            />
 
             <label>Ciudad</label>
-            <input type="text" placeholder={data?.city || ''} onChange={(event) => handleChange(event, 'city')} />
+            <input 
+                type="text" 
+                placeholder={data?.city || ''} 
+                onChange={(event) => handleChange(event, 'city')} 
+            />
 
             <label>Hobbies</label>
             <div className="hobby-input">

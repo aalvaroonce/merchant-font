@@ -30,6 +30,7 @@ function LogIn() {
 
                     if (data.data.token) {
                         localStorage.setItem('token', data.data.token);
+                        localStorage.setItem('user', JSON.stringify(data.data.user));
                         setMensaje({ text: data.message, type: "exito" });
                     } else if (data.errors && Array.isArray(data.errors)) {
                         const errorMessages = data.errors.map(error => error.msg).join(", ");

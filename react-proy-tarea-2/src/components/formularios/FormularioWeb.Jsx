@@ -1,82 +1,76 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function FormularioWeb({ sendData }) {
-    const [data, setData] = useState({
-        name: '',
-        email: '',
-        age: 0,
-        city: '',
-        hobbies: [],
-        openToOffers: false
-    });
+const getUserDataFromLocalStorage = () => {
+    const userData = localStorage.getItem('user');
+    try {
+        const parsedData = JSON.parse(userData) || {};
+        return parsedData;
+    } catch (error) {
+        console.warn("Error al parsear los datos del localStorage:", error);
+        return {};
+    }
+};
 
-    const [error, setError] = useState("");
-    const [newHobby, setNewHobby] = useState(""); 
+function FormularioWeb({ sendData, web }) {
+    const user = getUserDataFromLocalStorage();
 
+    const [data, setData] = useState(null);
 
-    const handleChange = (event, field) => {
-        const value = field === 'openToOffers' ? event.target.checked : event.target.value;
-        setData({
-            ...data,
-            [field]: value
-        });
+    useEffect(() => {
+
+        const getInitialData = () => {
+            const existingReview = web.reviews.reviewTexts.find(
+                review => review.userId === user._id
+            );
+            return existingReview
+                ? { scoring: existingReview.scoring, reviewText: existingReview.reviewText }
+                : { scoring: 0, reviewText: "" };
+        };
+
+        setData(getInitialData());
+    }, [web, user._id]);
+
+    const handleScoringChange = (newScoring) => {
+        setData(prevData => ({ ...prevData, scoring: newScoring }));
     };
 
-    const handleClick = () => {
-        if (data.password !== data.confirmPassword) {
-            setError("Las contraseñas no coinciden");
-            return;
-        }
+    const handleTextChange = (event) => {
+        setData(prevData => ({ ...prevData, reviewText: event.target.value }));
+    };
 
-        setError("");
+    const handleSubmit = () => {
         sendData(data);
     };
 
-    const handleAddHobby = () => {
-        if (newHobby.trim()) {
-            setData({
-                ...data,
-                hobbies: [...data.hobbies, newHobby.trim()]
-            });
-            setNewHobby(""); 
-        }
-    };
+    if (!data) {
+        return <div>Cargando...</div>;
+    }
 
     return (
+        
         <div className="formulario-container">
-            <label>Nombre</label>
-            <input type="text" onChange={(event) => handleChange(event, 'name')} />
-
-            <label>Email</label>
-            <input type="text" onChange={(event) => handleChange(event, 'email')} />
-
-            <label>Edad</label>
-            <input type="number" onChange={(event) => handleChange(event, 'age')} />
-
-            <label>Ciudad</label>
-            <input type="text" onChange={(event) => handleChange(event, 'city')} />
-
-            <label>Hobbies</label>
-            <div className="hobby-input">
-                <input 
-                    type="text" 
-                    value={newHobby} 
-                    onChange={(event) => setNewHobby(event.target.value)} 
-                />
-                <button type="button" onClick={handleAddHobby}>Añadir hobby</button>
-            </div>
-            <div>
-                <label>¿Desea recibir notificaciones de posibles comercios?</label>
-                <input
-                    type="checkbox"
-                    checked={data.openToOffers}
-                    onChange={(event) => handleChange(event, 'openToOffers')}
-                />
+            <label>Puntuación:</label>
+            <div className="star-rating">
+                {[1, 2, 3, 4, 5].map(star => (
+                    <span
+                        key={star}
+                        className={`star ${star <= data.scoring ? 'filled' : ''}`}
+                        onClick={() => handleScoringChange(star)}
+                    >
+                        ★
+                    </span>
+                ))}
             </div>
 
-            {error && <div className="error-message">{error}</div>}
+            <label>Reseña:</label>
+            <input
+                type="text"
+                value={data.reviewText}
+                onChange={handleTextChange}
+                placeholder="Escribe tu reseña"
+            />
 
-            <button onClick={handleClick}>Enviar</button>
+            <button onClick={handleSubmit}>Enviar Reseña</button>
         </div>
     );
 }

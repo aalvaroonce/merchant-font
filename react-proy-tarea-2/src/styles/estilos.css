@@ -138,3 +138,15 @@
     background-color: #fee2e2;
     color: #b91c1c;
 }
+
+/* Star styles */
+.star {
+    font-size: 24px;
+    margin: 0 4px;
+    cursor: pointer;
+    color: gray;
+}
+
+.star.filled {
+    color: gold;
+}

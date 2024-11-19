@@ -16,7 +16,7 @@ export default function Paypal({sendData}) {
     return (
         <div>
             <label>Correo de PayPal</label>
-            <input type="email" {...register('paypalEmail', {  
+            <input type="email" {...register('paypalEmail', {
                 required: "El correo de PayPal es requerido", 
                 pattern: { 
                     value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,

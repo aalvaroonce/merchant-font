@@ -1,16 +1,18 @@
 // Bizum.jsx
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function Bizum({ sendData }) {
-    const { register, formState: { errors }, watch } = useForm();
+    const { register, formState: { errors, isValid }, watch } = useForm();
     const phoneValue = watch("phone");
+    const hasSentData = useRef(false);
 
     useEffect(() => {
-        if (phoneValue) {
+        if (phoneValue && isValid && !hasSentData.current) {
             sendData({ phone: phoneValue });
+            hasSentData.current = true;
         }
-    }, [phoneValue, sendData]);
+    }, [phoneValue, isValid, sendData]);
 
     return (
         <div>

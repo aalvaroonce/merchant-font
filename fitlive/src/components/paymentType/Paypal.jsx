@@ -1,15 +1,22 @@
 import { useForm } from "react-hook-form";
+import { useEffect, useRef } from "react";
 
 export default function Paypal({sendData}) {
-    const { register, formState: { errors }, handleSubmit } = useForm();
+    const { register, formState: { errors, isValid }, watch } = useForm();
+    const emailValue = watch("paypalEmail");
+    const hasSentData = useRef(false);
 
-    const onSubmit = (data) => {
-        sendData(data)
-    };
+    useEffect(() => {
+        if (emailValue && isValid && !hasSentData.current) {
+            sendData({ email: emailValue });
+            hasSentData.current = true;
+        }
+    }, [emailValue, isValid, sendData]);
+
     return (
-        <div onSubmit={handleSubmit(onSubmit)}>
+        <div>
             <label>Correo de PayPal</label>
-            <input type="email" {...register('paypalEmail', { 
+            <input type="email" {...register('paypalEmail', {  
                 required: "El correo de PayPal es requerido", 
                 pattern: { 
                     value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
